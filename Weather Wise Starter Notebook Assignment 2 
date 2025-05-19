@@ -1,0 +1,1049 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Dineshkumar128/ISYS2001-S1-2025/blob/main/Weather%20Wise%20Starter%20Notebook%20Assignment%202%20\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "72e78a05",
+      "metadata": {
+        "id": "72e78a05"
+      },
+      "source": [
+        "# 🌦️ WeatherWise – Starter Notebook\n",
+        "\n",
+        "Welcome to your **WeatherWise** project notebook! This scaffold is designed to help you build your weather advisor app using Python, visualisations, and AI-enhanced development.\n",
+        "\n",
+        "---\n",
+        "\n",
+        "📄 **Full Assignment Specification**  \n",
+        "See [`ASSIGNMENT.md`](ASSIGNMENT.md) or check the LMS for full details.\n",
+        "\n",
+        "📝 **Quick Refresher**  \n",
+        "A one-page summary is available in [`resources/assignment-summary.md`](resources/assignment-summary.md).\n",
+        "\n",
+        "---\n",
+        "\n",
+        "🧠 **This Notebook Structure is Optional**  \n",
+        "You’re encouraged to reorganise, rename sections, or remove scaffold cells if you prefer — as long as your final version meets the requirements.\n",
+        "\n",
+        "✅ You may delete this note before submission.\n",
+        "\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "fa8c7f6c",
+      "metadata": {
+        "id": "fa8c7f6c"
+      },
+      "source": [
+        "## 🧰 Setup and Imports\n",
+        "\n",
+        "This section imports commonly used packages and installs any additional tools used in the project.\n",
+        "\n",
+        "- You may not need all of these unless you're using specific features (e.g. visualisations, advanced prompting).\n",
+        "- The notebook assumes the following packages are **pre-installed** in the provided environment or installable via pip:\n",
+        "  - `requests`, `matplotlib`, `pyinputplus`\n",
+        "  - `fetch-my-weather` (for accessing weather data easily)\n",
+        "  - `hands-on-ai` (for AI logging, comparisons, or prompting tools)\n",
+        "\n",
+        "If you're running this notebook in **Google Colab**, uncomment the following lines to install the required packages.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 31,
+      "id": "70c3f3f1",
+      "metadata": {
+        "id": "70c3f3f1",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "0b51740f-b560-48ee-ffbc-0f82532421ff"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting fetch-my-weather\n",
+            "  Downloading fetch_my_weather-0.4.0-py3-none-any.whl.metadata (12 kB)\n",
+            "Requirement already satisfied: requests>=2.25.0 in /usr/local/lib/python3.11/dist-packages (from fetch-my-weather) (2.32.3)\n",
+            "Requirement already satisfied: pydantic>=1.8.0 in /usr/local/lib/python3.11/dist-packages (from fetch-my-weather) (2.11.4)\n",
+            "Requirement already satisfied: annotated-types>=0.6.0 in /usr/local/lib/python3.11/dist-packages (from pydantic>=1.8.0->fetch-my-weather) (0.7.0)\n",
+            "Requirement already satisfied: pydantic-core==2.33.2 in /usr/local/lib/python3.11/dist-packages (from pydantic>=1.8.0->fetch-my-weather) (2.33.2)\n",
+            "Requirement already satisfied: typing-extensions>=4.12.2 in /usr/local/lib/python3.11/dist-packages (from pydantic>=1.8.0->fetch-my-weather) (4.13.2)\n",
+            "Requirement already satisfied: typing-inspection>=0.4.0 in /usr/local/lib/python3.11/dist-packages (from pydantic>=1.8.0->fetch-my-weather) (0.4.0)\n",
+            "Requirement already satisfied: charset-normalizer<4,>=2 in /usr/local/lib/python3.11/dist-packages (from requests>=2.25.0->fetch-my-weather) (3.4.2)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.11/dist-packages (from requests>=2.25.0->fetch-my-weather) (3.10)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.11/dist-packages (from requests>=2.25.0->fetch-my-weather) (2.4.0)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.11/dist-packages (from requests>=2.25.0->fetch-my-weather) (2025.4.26)\n",
+            "Downloading fetch_my_weather-0.4.0-py3-none-any.whl (17 kB)\n",
+            "Installing collected packages: fetch-my-weather\n",
+            "Successfully installed fetch-my-weather-0.4.0\n",
+            "Collecting hands-on-ai\n",
+            "  Downloading hands_on_ai-0.1.9-py3-none-any.whl.metadata (4.7 kB)\n",
+            "Requirement already satisfied: requests in /usr/local/lib/python3.11/dist-packages (from hands-on-ai) (2.32.3)\n",
+            "Requirement already satisfied: typer in /usr/local/lib/python3.11/dist-packages (from hands-on-ai) (0.15.3)\n",
+            "Collecting python-fasthtml (from hands-on-ai)\n",
+            "  Downloading python_fasthtml-0.12.18-py3-none-any.whl.metadata (9.3 kB)\n",
+            "Collecting python-docx (from hands-on-ai)\n",
+            "  Downloading python_docx-1.1.2-py3-none-any.whl.metadata (2.0 kB)\n",
+            "Collecting pymupdf (from hands-on-ai)\n",
+            "  Downloading pymupdf-1.25.5-cp39-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (3.4 kB)\n",
+            "Requirement already satisfied: scikit-learn in /usr/local/lib/python3.11/dist-packages (from hands-on-ai) (1.6.1)\n",
+            "Requirement already satisfied: numpy in /usr/local/lib/python3.11/dist-packages (from hands-on-ai) (2.0.2)\n",
+            "Requirement already satisfied: lxml>=3.1.0 in /usr/local/lib/python3.11/dist-packages (from python-docx->hands-on-ai) (5.4.0)\n",
+            "Requirement already satisfied: typing-extensions>=4.9.0 in /usr/local/lib/python3.11/dist-packages (from python-docx->hands-on-ai) (4.13.2)\n",
+            "Collecting fastcore>=1.8.1 (from python-fasthtml->hands-on-ai)\n",
+            "  Downloading fastcore-1.8.2-py3-none-any.whl.metadata (3.7 kB)\n",
+            "Requirement already satisfied: python-dateutil in /usr/local/lib/python3.11/dist-packages (from python-fasthtml->hands-on-ai) (2.9.0.post0)\n",
+            "Collecting starlette>0.33 (from python-fasthtml->hands-on-ai)\n",
+            "  Downloading starlette-0.46.2-py3-none-any.whl.metadata (6.2 kB)\n",
+            "Requirement already satisfied: oauthlib in /usr/local/lib/python3.11/dist-packages (from python-fasthtml->hands-on-ai) (3.2.2)\n",
+            "Requirement already satisfied: itsdangerous in /usr/local/lib/python3.11/dist-packages (from python-fasthtml->hands-on-ai) (2.2.0)\n",
+            "Collecting uvicorn>=0.30 (from uvicorn[standard]>=0.30->python-fasthtml->hands-on-ai)\n",
+            "  Downloading uvicorn-0.34.2-py3-none-any.whl.metadata (6.5 kB)\n",
+            "Requirement already satisfied: httpx in /usr/local/lib/python3.11/dist-packages (from python-fasthtml->hands-on-ai) (0.28.1)\n",
+            "Collecting fastlite>=0.1.1 (from python-fasthtml->hands-on-ai)\n",
+            "  Downloading fastlite-0.1.3-py3-none-any.whl.metadata (11 kB)\n",
+            "Collecting python-multipart (from python-fasthtml->hands-on-ai)\n",
+            "  Downloading python_multipart-0.0.20-py3-none-any.whl.metadata (1.8 kB)\n",
+            "Requirement already satisfied: beautifulsoup4 in /usr/local/lib/python3.11/dist-packages (from python-fasthtml->hands-on-ai) (4.13.4)\n",
+            "Requirement already satisfied: charset-normalizer<4,>=2 in /usr/local/lib/python3.11/dist-packages (from requests->hands-on-ai) (3.4.2)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.11/dist-packages (from requests->hands-on-ai) (3.10)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.11/dist-packages (from requests->hands-on-ai) (2.4.0)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.11/dist-packages (from requests->hands-on-ai) (2025.4.26)\n",
+            "Requirement already satisfied: scipy>=1.6.0 in /usr/local/lib/python3.11/dist-packages (from scikit-learn->hands-on-ai) (1.15.3)\n",
+            "Requirement already satisfied: joblib>=1.2.0 in /usr/local/lib/python3.11/dist-packages (from scikit-learn->hands-on-ai) (1.5.0)\n",
+            "Requirement already satisfied: threadpoolctl>=3.1.0 in /usr/local/lib/python3.11/dist-packages (from scikit-learn->hands-on-ai) (3.6.0)\n",
+            "Requirement already satisfied: click>=8.0.0 in /usr/local/lib/python3.11/dist-packages (from typer->hands-on-ai) (8.2.0)\n",
+            "Requirement already satisfied: shellingham>=1.3.0 in /usr/local/lib/python3.11/dist-packages (from typer->hands-on-ai) (1.5.4)\n",
+            "Requirement already satisfied: rich>=10.11.0 in /usr/local/lib/python3.11/dist-packages (from typer->hands-on-ai) (13.9.4)\n",
+            "Requirement already satisfied: packaging in /usr/local/lib/python3.11/dist-packages (from fastcore>=1.8.1->python-fasthtml->hands-on-ai) (24.2)\n",
+            "Collecting apswutils>=0.0.2 (from fastlite>=0.1.1->python-fasthtml->hands-on-ai)\n",
+            "  Downloading apswutils-0.0.2-py3-none-any.whl.metadata (7.1 kB)\n",
+            "Requirement already satisfied: markdown-it-py>=2.2.0 in /usr/local/lib/python3.11/dist-packages (from rich>=10.11.0->typer->hands-on-ai) (3.0.0)\n",
+            "Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /usr/local/lib/python3.11/dist-packages (from rich>=10.11.0->typer->hands-on-ai) (2.19.1)\n",
+            "Requirement already satisfied: anyio<5,>=3.6.2 in /usr/local/lib/python3.11/dist-packages (from starlette>0.33->python-fasthtml->hands-on-ai) (4.9.0)\n",
+            "Requirement already satisfied: h11>=0.8 in /usr/local/lib/python3.11/dist-packages (from uvicorn>=0.30->uvicorn[standard]>=0.30->python-fasthtml->hands-on-ai) (0.16.0)\n",
+            "Collecting httptools>=0.6.3 (from uvicorn[standard]>=0.30->python-fasthtml->hands-on-ai)\n",
+            "  Downloading httptools-0.6.4-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (3.6 kB)\n",
+            "Collecting python-dotenv>=0.13 (from uvicorn[standard]>=0.30->python-fasthtml->hands-on-ai)\n",
+            "  Downloading python_dotenv-1.1.0-py3-none-any.whl.metadata (24 kB)\n",
+            "Requirement already satisfied: pyyaml>=5.1 in /usr/local/lib/python3.11/dist-packages (from uvicorn[standard]>=0.30->python-fasthtml->hands-on-ai) (6.0.2)\n",
+            "Collecting uvloop!=0.15.0,!=0.15.1,>=0.14.0 (from uvicorn[standard]>=0.30->python-fasthtml->hands-on-ai)\n",
+            "  Downloading uvloop-0.21.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.9 kB)\n",
+            "Collecting watchfiles>=0.13 (from uvicorn[standard]>=0.30->python-fasthtml->hands-on-ai)\n",
+            "  Downloading watchfiles-1.0.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.9 kB)\n",
+            "Requirement already satisfied: websockets>=10.4 in /usr/local/lib/python3.11/dist-packages (from uvicorn[standard]>=0.30->python-fasthtml->hands-on-ai) (15.0.1)\n",
+            "Requirement already satisfied: soupsieve>1.2 in /usr/local/lib/python3.11/dist-packages (from beautifulsoup4->python-fasthtml->hands-on-ai) (2.7)\n",
+            "Requirement already satisfied: httpcore==1.* in /usr/local/lib/python3.11/dist-packages (from httpx->python-fasthtml->hands-on-ai) (1.0.9)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil->python-fasthtml->hands-on-ai) (1.17.0)\n",
+            "Requirement already satisfied: sniffio>=1.1 in /usr/local/lib/python3.11/dist-packages (from anyio<5,>=3.6.2->starlette>0.33->python-fasthtml->hands-on-ai) (1.3.1)\n",
+            "Collecting apsw (from apswutils>=0.0.2->fastlite>=0.1.1->python-fasthtml->hands-on-ai)\n",
+            "  Downloading apsw-3.49.2.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (3.7 kB)\n",
+            "Requirement already satisfied: mdurl~=0.1 in /usr/local/lib/python3.11/dist-packages (from markdown-it-py>=2.2.0->rich>=10.11.0->typer->hands-on-ai) (0.1.2)\n",
+            "Downloading hands_on_ai-0.1.9-py3-none-any.whl (132 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m132.3/132.3 kB\u001b[0m \u001b[31m4.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading pymupdf-1.25.5-cp39-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (20.0 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m20.0/20.0 MB\u001b[0m \u001b[31m31.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading python_docx-1.1.2-py3-none-any.whl (244 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m244.3/244.3 kB\u001b[0m \u001b[31m16.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading python_fasthtml-0.12.18-py3-none-any.whl (69 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m69.9/69.9 kB\u001b[0m \u001b[31m4.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading fastcore-1.8.2-py3-none-any.whl (78 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m78.2/78.2 kB\u001b[0m \u001b[31m5.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading fastlite-0.1.3-py3-none-any.whl (17 kB)\n",
+            "Downloading starlette-0.46.2-py3-none-any.whl (72 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m72.0/72.0 kB\u001b[0m \u001b[31m3.6 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading uvicorn-0.34.2-py3-none-any.whl (62 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m62.5/62.5 kB\u001b[0m \u001b[31m3.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading python_multipart-0.0.20-py3-none-any.whl (24 kB)\n",
+            "Downloading apswutils-0.0.2-py3-none-any.whl (80 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m80.5/80.5 kB\u001b[0m \u001b[31m5.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading httptools-0.6.4-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (459 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m459.8/459.8 kB\u001b[0m \u001b[31m18.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading python_dotenv-1.1.0-py3-none-any.whl (20 kB)\n",
+            "Downloading uvloop-0.21.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.0 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m4.0/4.0 MB\u001b[0m \u001b[31m49.0 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading watchfiles-1.0.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (454 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m454.8/454.8 kB\u001b[0m \u001b[31m20.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading apsw-3.49.2.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (6.4 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m6.4/6.4 MB\u001b[0m \u001b[31m71.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hInstalling collected packages: uvloop, uvicorn, python-multipart, python-dotenv, python-docx, pymupdf, httptools, fastcore, apsw, watchfiles, starlette, apswutils, fastlite, python-fasthtml, hands-on-ai\n",
+            "  Attempting uninstall: fastcore\n",
+            "    Found existing installation: fastcore 1.7.29\n",
+            "    Uninstalling fastcore-1.7.29:\n",
+            "      Successfully uninstalled fastcore-1.7.29\n",
+            "\u001b[31mERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n",
+            "fastai 2.7.19 requires fastcore<1.8,>=1.5.29, but you have fastcore 1.8.2 which is incompatible.\u001b[0m\u001b[31m\n",
+            "\u001b[0mSuccessfully installed apsw-3.49.2.0 apswutils-0.0.2 fastcore-1.8.2 fastlite-0.1.3 hands-on-ai-0.1.9 httptools-0.6.4 pymupdf-1.25.5 python-docx-1.1.2 python-dotenv-1.1.0 python-fasthtml-0.12.18 python-multipart-0.0.20 starlette-0.46.2 uvicorn-0.34.2 uvloop-0.21.0 watchfiles-1.0.5\n",
+            "Collecting pyinputplus\n",
+            "  Downloading PyInputPlus-0.2.12.tar.gz (20 kB)\n",
+            "  Installing build dependencies ... \u001b[?25l\u001b[?25hdone\n",
+            "  Getting requirements to build wheel ... \u001b[?25l\u001b[?25hdone\n",
+            "  Preparing metadata (pyproject.toml) ... \u001b[?25l\u001b[?25hdone\n",
+            "Collecting pysimplevalidate>=0.2.7 (from pyinputplus)\n",
+            "  Downloading PySimpleValidate-0.2.12.tar.gz (22 kB)\n",
+            "  Installing build dependencies ... \u001b[?25l\u001b[?25hdone\n",
+            "  Getting requirements to build wheel ... \u001b[?25l\u001b[?25hdone\n",
+            "  Preparing metadata (pyproject.toml) ... \u001b[?25l\u001b[?25hdone\n",
+            "Collecting stdiomask>=0.0.3 (from pyinputplus)\n",
+            "  Downloading stdiomask-0.0.6.tar.gz (3.6 kB)\n",
+            "  Installing build dependencies ... \u001b[?25l\u001b[?25hdone\n",
+            "  Getting requirements to build wheel ... \u001b[?25l\u001b[?25hdone\n",
+            "  Preparing metadata (pyproject.toml) ... \u001b[?25l\u001b[?25hdone\n",
+            "Building wheels for collected packages: pyinputplus, pysimplevalidate, stdiomask\n",
+            "  Building wheel for pyinputplus (pyproject.toml) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for pyinputplus: filename=pyinputplus-0.2.12-py3-none-any.whl size=11349 sha256=3d374ec1a8b8fb7ea28d3e82cc4303135cd08dff47758744b27566b79302723c\n",
+            "  Stored in directory: /root/.cache/pip/wheels/a3/6b/89/3bec14288af8e0729d088fb41a785e583d49e772f2529c7676\n",
+            "  Building wheel for pysimplevalidate (pyproject.toml) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for pysimplevalidate: filename=pysimplevalidate-0.2.12-py3-none-any.whl size=16224 sha256=9f317ad81f26e1365c864a34a61282c386effc642c0114762e248b1bdbc7306d\n",
+            "  Stored in directory: /root/.cache/pip/wheels/fc/40/7a/4d3b2dc2e80b4b3bbda89eec94fcefd6c8bd1101cc7bb89554\n",
+            "  Building wheel for stdiomask (pyproject.toml) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for stdiomask: filename=stdiomask-0.0.6-py3-none-any.whl size=3356 sha256=12ba5f23d4d5fd8ca339d8853f53ab4b956d726870c9017028f8a86493b77f32\n",
+            "  Stored in directory: /root/.cache/pip/wheels/19/0c/90/5ee0da7cf06ff7e233f273063797785d5eabf0ab9f04220866\n",
+            "Successfully built pyinputplus pysimplevalidate stdiomask\n",
+            "Installing collected packages: stdiomask, pysimplevalidate, pyinputplus\n",
+            "Successfully installed pyinputplus-0.2.12 pysimplevalidate-0.2.12 stdiomask-0.0.6\n",
+            "Collecting mcp\n",
+            "  Downloading mcp-1.9.0-py3-none-any.whl.metadata (26 kB)\n",
+            "Requirement already satisfied: anyio>=4.5 in /usr/local/lib/python3.11/dist-packages (from mcp) (4.9.0)\n",
+            "Collecting httpx-sse>=0.4 (from mcp)\n",
+            "  Downloading httpx_sse-0.4.0-py3-none-any.whl.metadata (9.0 kB)\n",
+            "Requirement already satisfied: httpx>=0.27 in /usr/local/lib/python3.11/dist-packages (from mcp) (0.28.1)\n",
+            "Collecting pydantic-settings>=2.5.2 (from mcp)\n",
+            "  Downloading pydantic_settings-2.9.1-py3-none-any.whl.metadata (3.8 kB)\n",
+            "Requirement already satisfied: pydantic<3.0.0,>=2.7.2 in /usr/local/lib/python3.11/dist-packages (from mcp) (2.11.4)\n",
+            "Requirement already satisfied: python-multipart>=0.0.9 in /usr/local/lib/python3.11/dist-packages (from mcp) (0.0.20)\n",
+            "Collecting sse-starlette>=1.6.1 (from mcp)\n",
+            "  Downloading sse_starlette-2.3.5-py3-none-any.whl.metadata (7.8 kB)\n",
+            "Requirement already satisfied: starlette>=0.27 in /usr/local/lib/python3.11/dist-packages (from mcp) (0.46.2)\n",
+            "Requirement already satisfied: uvicorn>=0.23.1 in /usr/local/lib/python3.11/dist-packages (from mcp) (0.34.2)\n",
+            "Requirement already satisfied: idna>=2.8 in /usr/local/lib/python3.11/dist-packages (from anyio>=4.5->mcp) (3.10)\n",
+            "Requirement already satisfied: sniffio>=1.1 in /usr/local/lib/python3.11/dist-packages (from anyio>=4.5->mcp) (1.3.1)\n",
+            "Requirement already satisfied: typing_extensions>=4.5 in /usr/local/lib/python3.11/dist-packages (from anyio>=4.5->mcp) (4.13.2)\n",
+            "Requirement already satisfied: certifi in /usr/local/lib/python3.11/dist-packages (from httpx>=0.27->mcp) (2025.4.26)\n",
+            "Requirement already satisfied: httpcore==1.* in /usr/local/lib/python3.11/dist-packages (from httpx>=0.27->mcp) (1.0.9)\n",
+            "Requirement already satisfied: h11>=0.16 in /usr/local/lib/python3.11/dist-packages (from httpcore==1.*->httpx>=0.27->mcp) (0.16.0)\n",
+            "Requirement already satisfied: annotated-types>=0.6.0 in /usr/local/lib/python3.11/dist-packages (from pydantic<3.0.0,>=2.7.2->mcp) (0.7.0)\n",
+            "Requirement already satisfied: pydantic-core==2.33.2 in /usr/local/lib/python3.11/dist-packages (from pydantic<3.0.0,>=2.7.2->mcp) (2.33.2)\n",
+            "Requirement already satisfied: typing-inspection>=0.4.0 in /usr/local/lib/python3.11/dist-packages (from pydantic<3.0.0,>=2.7.2->mcp) (0.4.0)\n",
+            "Requirement already satisfied: python-dotenv>=0.21.0 in /usr/local/lib/python3.11/dist-packages (from pydantic-settings>=2.5.2->mcp) (1.1.0)\n",
+            "Requirement already satisfied: click>=7.0 in /usr/local/lib/python3.11/dist-packages (from uvicorn>=0.23.1->mcp) (8.2.0)\n",
+            "Downloading mcp-1.9.0-py3-none-any.whl (125 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m125.1/125.1 kB\u001b[0m \u001b[31m4.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading httpx_sse-0.4.0-py3-none-any.whl (7.8 kB)\n",
+            "Downloading pydantic_settings-2.9.1-py3-none-any.whl (44 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m44.4/44.4 kB\u001b[0m \u001b[31m2.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading sse_starlette-2.3.5-py3-none-any.whl (10 kB)\n",
+            "Installing collected packages: httpx-sse, sse-starlette, pydantic-settings, mcp\n",
+            "Successfully installed httpx-sse-0.4.0 mcp-1.9.0 pydantic-settings-2.9.1 sse-starlette-2.3.5\n"
+          ]
+        }
+      ],
+      "source": [
+        "# 🧪 Optional packages — uncomment if needed in Colab or JupyterHub\n",
+        "!pip install fetch-my-weather\n",
+        "!pip install hands-on-ai\n",
+        "!pip install pyinputplus\n",
+        "!pip install mcp\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import os\n",
+        "\n",
+        "os.environ['HANDS_ON_AI_SERVER'] = 'http://ollama.serveur.au'\n",
+        "import pyinputplus as pyip\n",
+        "from mcp.server.fastmcp import FastMCP\n",
+        "os.environ['HANDS_ON_AI_MODEL'] = 'granite3.2'\n",
+        "os.environ['HANDS_ON_AI_API_KEY'] = input('Enter your API key: ')"
+      ],
+      "metadata": {
+        "id": "B2JKlJfrGgIb",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "aa5a3a05-91da-4828-965a-7696f5c2cbaf"
+      },
+      "id": "B2JKlJfrGgIb",
+      "execution_count": 32,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Enter your API key: 12\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "59ae7543",
+      "metadata": {
+        "id": "59ae7543"
+      },
+      "source": [
+        "## 📦 Setup and Configuration\n",
+        "Import required packages and setup environment."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 33,
+      "id": "f1dd051e",
+      "metadata": {
+        "id": "f1dd051e",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "a076d5e5-efe2-4092-b045-9c222ef9e16b"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Selecting previously unselected package libarchive-dev:amd64.\n",
+            "(Reading database ... 126102 files and directories currently installed.)\n",
+            "Preparing to unpack .../libarchive-dev_3.6.0-1ubuntu1.4_amd64.deb ...\n",
+            "Unpacking libarchive-dev:amd64 (3.6.0-1ubuntu1.4) ...\n",
+            "Setting up libarchive-dev:amd64 (3.6.0-1ubuntu1.4) ...\n",
+            "Processing triggers for man-db (2.10.2-1) ...\n",
+            "Collecting libarchive\n",
+            "  Downloading libarchive-0.4.7.tar.gz (23 kB)\n",
+            "  Preparing metadata (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "Collecting nose (from libarchive)\n",
+            "  Downloading nose-1.3.7-py3-none-any.whl.metadata (1.7 kB)\n",
+            "Downloading nose-1.3.7-py3-none-any.whl (154 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m154.7/154.7 kB\u001b[0m \u001b[31m4.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hBuilding wheels for collected packages: libarchive\n",
+            "  Building wheel for libarchive (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for libarchive: filename=libarchive-0.4.7-py3-none-any.whl size=31629 sha256=acd66c51e82e73cf0c7ee886248e0d0f8e7098569705657b7b3ba0e6e35c9994\n",
+            "  Stored in directory: /root/.cache/pip/wheels/32/98/bd/4893d6923dd027f455b250367d402bfd69a6f4416581df46db\n",
+            "Successfully built libarchive\n",
+            "Installing collected packages: nose, libarchive\n",
+            "Successfully installed libarchive-0.4.7 nose-1.3.7\n"
+          ]
+        }
+      ],
+      "source": [
+        "import requests\n",
+        "import matplotlib.pyplot as plt\n",
+        "import pyinputplus as pyip\n",
+        "# ✅ Import after installing (if needed)\n",
+        "from fetch_my_weather import get_weather\n",
+        "from hands_on_ai.chat import get_response\n",
+        "from mcp.server.fastmcp import FastMCP\n",
+        "\n",
+        "# https://pypi.python.org/pypi/libarchive\n",
+        "!apt-get -qq install -y libarchive-dev && pip install -U libarchive\n",
+        "import libarchive"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "f736ade3",
+      "metadata": {
+        "id": "f736ade3"
+      },
+      "source": [
+        "## 🌤️ Weather Data Functions"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 34,
+      "id": "7a2c7cd0",
+      "metadata": {
+        "id": "7a2c7cd0",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "5b4693b3-d82f-4e67-9b6e-8acce1306646"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Current weather in Perth, Australia:\n",
+            "  Temperature: 24.8°C\n",
+            "  Weather: clear sky\n",
+            "  Humidity: 52%\n",
+            "  Wind Speed: 9.26 m/s\n",
+            "----------------------------------------\n",
+            "Forecast for 2025-05-19:\n",
+            "  Avg Temperature: 19.4°C\n",
+            "  Common Weather: light rain\n",
+            "  Number of Forecast Entries: 4\n",
+            "--------------------\n",
+            "Forecast for 2025-05-20:\n",
+            "  Avg Temperature: 16.2°C\n",
+            "  Common Weather: clear sky\n",
+            "  Number of Forecast Entries: 8\n",
+            "--------------------\n",
+            "Forecast for 2025-05-21:\n",
+            "  Avg Temperature: 18.5°C\n",
+            "  Common Weather: clear sky\n",
+            "  Number of Forecast Entries: 8\n",
+            "--------------------\n"
+          ]
+        }
+      ],
+      "source": [
+        "import requests\n",
+        "from datetime import datetime, timedelta, timezone\n",
+        "\n",
+        "API_KEY = \"171da0cb2cafbdcb201c75a79a05f1b9\"  # Replace with your actual API key if needed\n",
+        "\n",
+        "def get_weather_data(location=\"Perth, Australia\", forecast_days=3):\n",
+        "    try:\n",
+        "        # Get current weather (also to find coordinates)\n",
+        "        url_current = (\n",
+        "            f\"https://api.openweathermap.org/data/2.5/weather?\"\n",
+        "            f\"q={location}&appid={API_KEY}&units=metric\"\n",
+        "        )\n",
+        "        res_current = requests.get(url_current)\n",
+        "        res_current.raise_for_status()\n",
+        "        data_current = res_current.json()\n",
+        "\n",
+        "        lat = data_current['coord']['lat']\n",
+        "        lon = data_current['coord']['lon']\n",
+        "\n",
+        "        # Get 5-day forecast (3-hour intervals)\n",
+        "        url_forecast = (\n",
+        "            f\"https://api.openweathermap.org/data/2.5/forecast?\"\n",
+        "            f\"lat={lat}&lon={lon}&appid={API_KEY}&units=metric\"\n",
+        "        )\n",
+        "        res_forecast = requests.get(url_forecast)\n",
+        "        res_forecast.raise_for_status()\n",
+        "        data_forecast = res_forecast.json()\n",
+        "\n",
+        "        # Use timezone offset from current weather\n",
+        "        tz_seconds = data_current.get('timezone', 0)\n",
+        "        tz = timezone(timedelta(seconds=tz_seconds))\n",
+        "        today = datetime.now(tz).date()\n",
+        "\n",
+        "        days_forecast = {}\n",
+        "\n",
+        "        # Group forecast entries by day (only next forecast_days days)\n",
+        "        for entry in data_forecast['list']:\n",
+        "            dt = datetime.fromtimestamp(entry['dt'], tz)\n",
+        "            day = dt.date()\n",
+        "            if 0 <= (day - today).days < forecast_days:\n",
+        "                days_forecast.setdefault(day, []).append(entry)\n",
+        "\n",
+        "        # Print current weather summary\n",
+        "        print(f\"Current weather in {location}:\")\n",
+        "        print(f\"  Temperature: {data_current['main']['temp']}°C\")\n",
+        "        print(f\"  Weather: {data_current['weather'][0]['description']}\")\n",
+        "        print(f\"  Humidity: {data_current['main']['humidity']}%\")\n",
+        "        print(f\"  Wind Speed: {data_current['wind']['speed']} m/s\")\n",
+        "        print(\"-\" * 40)\n",
+        "\n",
+        "        # Print daily forecast summary\n",
+        "        for day, entries in sorted(days_forecast.items()):\n",
+        "            temps = [e['main']['temp'] for e in entries]\n",
+        "            descriptions = [e['weather'][0]['description'] for e in entries]\n",
+        "            avg_temp = sum(temps) / len(temps)\n",
+        "            common_desc = max(set(descriptions), key=descriptions.count)\n",
+        "            print(f\"Forecast for {day}:\")\n",
+        "            print(f\"  Avg Temperature: {avg_temp:.1f}°C\")\n",
+        "            print(f\"  Common Weather: {common_desc}\")\n",
+        "            print(f\"  Number of Forecast Entries: {len(entries)}\")\n",
+        "            print(\"-\" * 20)\n",
+        "\n",
+        "    except requests.RequestException as e:\n",
+        "        print(f\"Request failed: {e}\")\n",
+        "    except KeyError as e:\n",
+        "        print(f\"Missing expected data in response: {e}\")\n",
+        "\n",
+        "if __name__ == \"__main__\":\n",
+        "    get_weather_data()\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "8a744fdc",
+      "metadata": {
+        "id": "8a744fdc"
+      },
+      "source": [
+        "## 📊 Visualisation Functions"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 35,
+      "id": "9dc3bf85",
+      "metadata": {
+        "id": "9dc3bf85",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 493
+        },
+        "outputId": "1b556a3d-4d9b-4dbc-9ff3-e407e280e2a1"
+      },
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<Figure size 800x500 with 1 Axes>"
+            ],
+            "image/png": "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dOnSRezevbvIwPH48WPx9ttvi7p168p/UBYOcCqVSixYsEAEBAQIKysr4eLiInr06CFiY2OLPY+sIaHt7NmzYsyYMaJevXrCxsZG2NnZiTp16ojw8HDx+eefi4SEBLlvdHS0mDRpkggNDRWenp7CyspKeHp6ilatWoklS5Zond+4OBU9yAph+ve9WnGvPYNs5SYJUYEO5CKiEhk1ahRWr16NBQsWYPLkyeVdToV0+fJl+Pv7w8nJCQkJCbCzsyvvkp6ZsLAwHDhwAPv375fPdUpE9G/CY2SJKrjz589rnXtWpVJh5cqVWLNmDWxsbDB48OByqq7imzlzJoQQGDt2bKUKsURElQFPv0VUwX3yySf47rvv0KxZM9SoUQOZmZm4cOEC/v77byiVSnz55Zc6r2ZTmf3888/Yvn07zp8/j2PHjsHT01Pnac+IiMi8McgSVXCDBg1Ceno6YmNjcerUKeTl5cHDwwODBg3CpEmT0LJly/IuscI5efIkVq1aBQcHB3Tu3BkLFy7UOm8wERGZPx4jS0RERERmicfIEhEREZFZYpAlIiIiIrNU6Y6RValUuHPnDhwcHCBJUnmXQ0RERESFCCHw6NEjeHl5QaHQv9+10gXZO3fuoGbNmuVdBhEREREV49atW/JlinWpdEHWwcEBwNMnxtHRsZyrISIiIqLC0tPTUbNmTTm36VPpgqz6cAJHR0cGWSIiIqIKrLjDQPllLyIiIiIySwyyRERERGSWGGSJiIiIyCwxyBIRERGRWWKQJSIiIiKzxCBLRERERGaJQZaIiIiIzBKDLBERERGZJQZZIiIiIjJLDLJEREREZJYYZImIiIjILDHIEhEREZFZYpAlIiIiIrPEIEtEREREZolBloiIiIjMEoMsEREREZklBlkiIiIiMksMskRERERklhhkiYiIiMgsMcgSERERkVlikCUiIiIis8QgS0RERERmiUGWiIiIiMwSgywRERERmSUGWSIiIiIySwyyRERERGSWGGSJiIiIyCwxyBIRERGRWWKQJSIiIiKzxCBLRERERGaJQZaIiIiIzBKDLBERERGZJQZZIiIiIjJLDLJEREREZJYYZImIiIjILDHIEhEREZFZYpAlIiIiIrPEIEtEREREZolBloiIiIjMEoMsEREREZklBlkiIiIiMksMskRERERklhhkiYiIiMgsMcgSERER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kyZN5Pa2bduibdu2Ji2OiIiIiEifEh9aYGVlhQEDBiAmJqYs6iEiIiIiMkiJg6wkSahXrx6Sk5PLoh4iIiIiIoMY9WWvd955B1988QUuXbpk6nqIiIiIiAxi1Je9jh49CldXVzRq1AhhYWGoXbs2bG1tNfpIkoTPPvvMJEUSERERERVmVJD94osv5P/fu3evzj4MskRERERUlowKsiqVytR1EBERERGViFHHyBIRERERlTej9siqHT16FPv378e9e/cwbtw41KtXD1lZWbh48SLq16+PKlWqmKpOIiIiIiINRu2Rzc3NRd++ffH8889j+vTp+Pzzz3Hr1q2nAyoU6NKlC4+PJSIiIqIyZVSQnTFjBn755RcsW7YMly5dghBC3mZjY4MBAwZg+/btJiuSiIiIiKgwo4Lspk2bMHbsWIwZMwYuLi5a2wMCAnD9+vVSF0dEREREpI9RQfbevXto3Lix3u1KpRJZWVlGF0VEREREVByjgmzNmjVx8eJFvdsPHz6MunXrGl0UEREREVFxjAqyQ4YMwYoVK3DkyBG5TZIkAMDKlSvx3XffYdiwYaapkIiIiIhIB6NOvzV9+nQcPXoU7dq1Q0BAACRJwptvvomHDx/i9u3b6NatG958801T10pEREREJDNqj6yVlRV27tyJ1atXo06dOvD390dOTg6aNGmCNWvWYMeOHVAqlaaulYiIiIhIZvQFESRJwssvv4yXX37ZlPUQERERERnEqD2yb7/9NuLi4kxdCxERERGRwYwKskuWLEFwcDDq1auHGTNm4OzZs6aui4iIiIioSEafR3b16tWoX78+5s+fj8DAQDz33HN4//33cenSJVPXSERERESkxagg6+DggGHDhuHXX3/F3bt38dVXX8Hb2xvvv/8+GjZsiMDAQHz00UemrpWIiIiISGZUkC3I2dkZo0ePxq5du5CYmIgFCxYgPj4e06dPN0V9REREREQ6GX3WgoKePHmC33//HVu2bMGOHTuQkZGBmjVrmmJoIiIiIiKdjA6yeXl52L17N7Zs2YLt27cjPT0d1atXx8iRIzFo0CC0bt3alHUSEREREWkwKsiOHj0a27ZtQ0pKCtzc3DB48GBERESgXbt28qVqiYiIiIjKklFBdtu2bejTpw8GDRqEjh076ryKV0pKCqpWrVrqAomIiIiIdDEqyN69excWFtp3zcnJ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\n"
+          },
+          "metadata": {}
+        }
+      ],
+      "source": [
+        "import matplotlib.pyplot as plt\n",
+        "\n",
+        "def create_temperature_visualisation(weather_data, output_type='display'):\n",
+        "    \"\"\"\n",
+        "    Create visualisation of temperature data.\n",
+        "\n",
+        "    Args:\n",
+        "        weather_data (dict): The processed weather data\n",
+        "        output_type (str): Either 'display' to show in notebook or 'figure' to return the figure\n",
+        "\n",
+        "    Returns:\n",
+        "        If output_type is 'figure', returns the matplotlib figure object\n",
+        "        Otherwise, displays the visualisation in the notebook\n",
+        "    \"\"\"\n",
+        "    # Extract data for visualization\n",
+        "    days = list(weather_data.keys())\n",
+        "    avg_temperatures = [weather_data[day]['avg_temp'] for day in days]\n",
+        "\n",
+        "    # Create the bar chart\n",
+        "    fig, ax = plt.subplots(figsize=(8, 5))\n",
+        "    ax.bar(days, avg_temperatures, color='skyblue', edgecolor='black')\n",
+        "    ax.set_title(\"Average Daily Temperatures in Perth\", fontsize=16)\n",
+        "    ax.set_xlabel(\"Date\", fontsize=12)\n",
+        "    ax.set_ylabel(\"Average Temperature (°C)\", fontsize=12)\n",
+        "    ax.grid(axis='y', linestyle='--', alpha=0.7)\n",
+        "    ax.set_ylim(0, max(avg_temperatures) + 5)\n",
+        "\n",
+        "    # Annotate values on bars\n",
+        "    for i, temp in enumerate(avg_temperatures):\n",
+        "        ax.text(i, temp + 0.5, f\"{temp:.1f}°C\", ha='center', fontsize=10)\n",
+        "\n",
+        "    # Handle output type\n",
+        "    if output_type == 'figure':\n",
+        "        return fig\n",
+        "    else:\n",
+        "        plt.show()\n",
+        "\n",
+        "# Example data matching your scenario\n",
+        "weather_data = {\n",
+        "    \"2025-05-19\": {\"avg_temp\": 18.3, \"common_weather\": \"few clouds\", \"entries\": 4},\n",
+        "    \"2025-05-20\": {\"avg_temp\": 16.2, \"common_weather\": \"clear sky\", \"entries\": 8},\n",
+        "    \"2025-05-21\": {\"avg_temp\": 18.5, \"common_weather\": \"clear sky\", \"entries\": 8},\n",
+        "}\n",
+        "\n",
+        "# Call the function to visualize data\n",
+        "create_temperature_visualisation(weather_data)\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import matplotlib.pyplot as plt\n",
+        "\n",
+        "def create_precipitation_visualisation(weather_data, output_type='display'):\n",
+        "    \"\"\"\n",
+        "    Create visualisation of precipitation data.\n",
+        "\n",
+        "    Args:\n",
+        "        weather_data (dict): The processed weather data\n",
+        "        output_type (str): Either 'display' to show in notebook or 'figure' to return the figure\n",
+        "\n",
+        "    Returns:\n",
+        "        If output_type is 'figure', returns the matplotlib figure object\n",
+        "        Otherwise, displays the visualisation in the notebook\n",
+        "    \"\"\"\n",
+        "    # Extract data for visualization\n",
+        "    days = list(weather_data.keys())\n",
+        "    precipitation_data = [weather_data[day].get('precipitation', 0) for day in days]\n",
+        "\n",
+        "    # Create the bar chart\n",
+        "    fig, ax = plt.subplots(figsize=(8, 5))\n",
+        "    bars = ax.bar(days, precipitation_data, color='royalblue', edgecolor='black')\n",
+        "\n",
+        "    # Add labels and title\n",
+        "    ax.set_title(\"Daily Precipitation Levels in Perth\", fontsize=16)\n",
+        "    ax.set_xlabel(\"Date\", fontsize=12)\n",
+        "    ax.set_ylabel(\"Precipitation (mm)\", fontsize=12)\n",
+        "    ax.set_ylim(0, max(precipitation_data) + 5)\n",
+        "    ax.grid(axis='y', linestyle='--', alpha=0.7)\n",
+        "\n",
+        "    # Annotate the bar chart with precipitation values\n",
+        "    for bar, precip in zip(bars, precipitation_data):\n",
+        "        ax.text(\n",
+        "            bar.get_x() + bar.get_width() / 2,\n",
+        "            bar.get_height() + 0.2,\n",
+        "            f\"{precip:.1f} mm\",\n",
+        "            ha='center',\n",
+        "            va='bottom',\n",
+        "            fontsize=10\n",
+        "        )\n",
+        "\n",
+        "    # Handle output type\n",
+        "    if output_type == 'figure':\n",
+        "        return fig\n",
+        "    else:\n",
+        "        plt.show()\n",
+        "\n",
+        "# Example data matching your scenario\n",
+        "weather_data = {\n",
+        "    \"2025-05-19\": {\"avg_temp\": 18.3, \"common_weather\": \"few clouds\", \"entries\": 4, \"precipitation\": 1.2},\n",
+        "    \"2025-05-20\": {\"avg_temp\": 16.2, \"common_weather\": \"clear sky\", \"entries\": 8, \"precipitation\": 0.0},\n",
+        "    \"2025-05-21\": {\"avg_temp\": 18.5, \"common_weather\": \"clear sky\", \"entries\": 8, \"precipitation\": 0.5},\n",
+        "}\n",
+        "\n",
+        "# Call the function to visualize precipitation data\n",
+        "create_precipitation_visualisation(weather_data)\n"
+      ],
+      "metadata": {
+        "id": "HpOlQylYG5Ho",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 493
+        },
+        "outputId": "c6c03076-2f33-46da-e174-88f67e2ef3b0"
+      },
+      "id": "HpOlQylYG5Ho",
+      "execution_count": 36,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<Figure size 800x500 with 1 Axes>"
+            ],
+            "image/png": "iVBORw0KGgoAAAANSUhEUgAAAqoAAAHcCAYAAAAeFogrAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjEwLjAsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvlHJYcgAAAAlwSFlzAAAPYQAAD2EBqD+naQAAV+FJREFUeJzt3Xd4FOX6//HP7IaQkIQAIdSEFkqCQOhIEQFBVERFERU4NEU8IIIIIh4EIyqiR4SjHMQCqEgRVLBQBKT8lCYh9CoEAtISCAk1Idn5/eE3e1jSl4QM5P26rr3O2Weeeea+Nzty78wzM4ZpmqYAAAAAi7EVdAAAAABARihUAQAAYEkUqgAAALAkClUAAABYEoUqAAAALIlCFQAAAJZEoQoAAABLolAFAACAJVGoAgAAwJIoVHFbqFKligzDcL5sNpv8/PwUFBSktm3bavjw4dq0aVOeb/fw4cMyDENVqlTJNKbDhw/n+XavNXPmTJfc0/L39/dX06ZN9dZbb+nChQv5GsONaNOmjQzD0OrVq/NkvLTPo0+fPnkyXl5J+9tYWdp3dubMmQUdSp54/fXXZRiGXn/99Vt6G9e6fl83DEPe3t4KCQlR3759tX379psSR07drP8O4vZFoYrbSsuWLdW7d2/16tVLDzzwgGrVqqVt27bp/fffV7NmzdSmTRsdOnSooMPMFz4+Purdu7d69+6tHj16qE6dOoqMjNTo0aPVqFEjnTp1qqBDLFBZ/ai4UXldbAPZ6dixo3N/b9u2rRITEzVz5kw1btxY33zzzU2J4WYX6SicPAo6ACAvPfPMM+mOpJmmqSVLlmjo0KFas2aNWrRoofXr16tq1ao3vL2KFStqz549KlKkyA2PdaNKly6d7kjYpk2bdM8992j//v0aMWKEvvzyy4IJLgtffvmlLl26pEqVKuXJeF26dNGdd94pf3//PBkvr+zZs6egQ0A+eP755/Xkk0+qdOnSN3W7r7zyitq0aeN8n5CQoMcff1zLly9X//791aFDB5UsWfKmxgTkB46o4rZnGIYeeOABbdq0STVq1NCpU6f0zDPP5MnYRYoUUWhoqEJCQvJkvLzWtGlTvfTSS5Kk7777TikpKQUcUXqVKlVSaGioihUrlifj+fv7KzQ0VOXLl8+T8fJKaGioQkNDCzoM5LHSpUsrNDT0pheq1/P399cnn3wiSUpMTNSyZcsKNB4gr1CootAoUaKEJk2aJEn69ddfFRkZ6bJ89+7dGjt2rFq2bKmKFSvK09NTAQEBat++faan0nJzOtnhcKhatWoyDEPr16/PtN/AgQNlGIZefvnlHOeWlUaNGkmSLl68qLi4OEmup+xiYmL09NNPKzg4WEWKFEl3RHrBggW67777FBgYKE9PT1WsWFE9e/bU7t27M91mfHy83njjDTVu3Fj+/v7y9vZWtWrV1K1bNy1ZssSlb2anzfv06eOcL7lt2zY9+uijCgwMlLe3t+rVq6fJkycrNTU13bYzmqPap08f5xH0I0eOpJvjl+b8+fP69NNP9eijj6pGjRry8fGRj4+P6tatq3/96186d+6cy7ZWr14twzC0Zs0aSVLbtm1dxr32CHdWc1TPnj2rV199VXfccYeKFSsmPz8/NWrUSO+++64uX76crn/adtu0aaOrV69qwoQJuuOOO+Tt7a2AgAA9+uijN+0I7uXLl/X+++/rzjvvVIkSJeTl5aVatWrp5Zdf1pkzZ1z6jho1SoZh6Lnnnst0vJ07d8owDJUtW1ZXr151WXb8+HENGzZMYWFhzs+pSZMm+uijj3L9I2z+/Plq3769AgICVKRIEQUEBKh27drq379/ruZ5Znb6+9rv4cWLFzVq1ChVr15dRYsWVbly5dS7d2/99ddfuYo5O1WqVFGpUqUkKd2c0MjISPXo0UOVKlVS0aJFVapUKXXs2FGLFy/OdKy0uaWLFi1Su3btVKpUKee+ahiGIiIiJEkREREu3/vM5oevWrVK9957r0qWLClvb281bNjQkmd5YC2c+kehcv/996tUqVI6e/asli9f7iziJGnixIn6/PPPFRoaqrp166pEiRKKiYnRqlWrtHLlSm3YsEETJ050e9s2m03PP/+8XnrpJX300Udq3rx5uj6JiYn66quvZLPZNHDgQLe3df2YaYoWLeqy7MCBA2rQoIE8PT3VsmVLmabpPDKUkpKiHj166JtvvlHRokXVqFEjVaxYUfv379fXX3+t7777Tt99953uu+8+lzG3bdumTp066a+//pK/v79atWolPz8/xcTE6KefftLp06d1//335zj+TZs26Z///KfKlSune+65R/Hx8Vq9erWGDh2q3377Td988022Fym1atVKFy5c0LfffisfHx917do1w37btm3Ts88+q8DAQNWqVUuNGjVSfHy8IiMj9fbbb+ubb77Rhg0bFBAQIEnOgmPp0qU6deqUOnbsqHLlyjnHq169erb5HTp0SO3atdORI0cUGBioBx54QFevXtWqVas0cuRIzZs3TytWrMjwNO7Vq1f1wAMPaN26dWrdurXCwsK0adMmff/991q1apWioqLyZU5umuPHj+u+++7Tjh07VKpUKTVp0kR+fn7asmWL3nvvPc2fP1+rV69W5cqVJUl9+/bVO++8o3nz5mnSpEny8vJKN+aMGTMkST179nSZUrN27Vo98sgjio+PV5UqVdShQwclJSVp06ZNGjx4sH788Uf99NNPOZqG88Ybb2js2LHy8PBQixYtVLFiRSUkJCgmJkaff/657rjjDtWrVy9PPqOEhAS1aNFCMTExuuuuu1SnTh2tX79eX375pdasWaNt27bl2TQVh8OhixcvSnLd1ydPnqxhw4bJ4XCofv36atasmU6ePKnVq1frl19+UUREhMaMGZPhmO+//74++ugjNW7cWPfdd5+OHz8uu92u3r17a+vWrdq2bZvCw8NVv3595zqtWrVKN8706dP15ptvqmHDhrrvvvt0+PBhbdiwQb1799bZs2c1dOjQPPkMcBsygdtA5cqVTUnmjBkzsu3bvn17U5LZs2dPl/bVq1ebBw8eTNd/7969ZlBQkCnJ3Lhxo8uy6OhoU5JZuXLlTGOKjo52tp07d8708fExPT09zZMnT6Zb58MPPzQlmZ07d842jzQzZszINAbTNM2uXbuaksxKlSo528aOHWtKcn4OV65cSbfeq6++akoymzVrZh46dMhl2fz580273W6WLFnSjI+Pd7ZfuHDBDA4ONiWZvXr1Ms+fP++y3rlz58zly5e7tN19992mJHPVqlUu7b1793bGOHDgQPPq1avOZTt37jQDAwNNSebHH3+c4efRu3dvl/as/lZpjh49aq5YscJMTU11ab948aLZq1cvZyzXyyyHa6Xlcr1mzZqZksyHHnrIvHDhgrP99OnTZsOGDU1JZvfu3V3WWbVqlXO8Bg0amCdOnHAuu3z5stmxY0dTkvnss89mGk9GcrMfORwOs2XLlqYk8+mnnzYTExOdy65evWq+9NJLpiSzbdu2LuulrTNnzpx0Y169etUsU6aMKcncsWOHs/3EiRNmQECAaRiG+d///tfl7xMXF2e2a9fOlGRG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3bvuukvVq1fX/v379fvvv6tly5bO79n1p/3TtnXgwAGNHDlSjRs3vuHYpb8LsK5duzrPQsTGxmr06NH65JNP1K9fP+fZgVtZ2t/IMAxNnz6dYhG3JL61KDQSEhL04osvSpI6dOjgcjuVs2fPSpLzNjrXMk1Ts2fPztNYDMPQ4MGDJf19W6zPPvtM0t9PubGCe+65R56enlq9erVOnz6d4/XSblU1ffr0DO9x6o758+dneAr7q6++kvT3Ud+cFHGenp6SlOn9NhMSEpSamqrixYunK1Klv4/4ZXYkNbuxM5N2RCzt9lbXi4qK0tatW13me1pF2i3G5s+f79YR5r59+0r6+36jkZGR2rFjh4KDgzM8kpm2rfx8NGhgYKDeffddSVJMTEyezUMuSBUqVFC9evV0/vx55/zxvOTu9x7IDQpV3PbM/3uEatOmTXXgwAGVL19en376qUuftAn9CxYs0IkTJ5ztqampGjNmTKYXGtyIPn36yN/fX9OnT9fp06fVtm1b1a5dO8+3446yZctq8ODBunjxojp37qwdO3ak65OUlKQffvhBe/fudbY988wzCgoKUlRUlPr37++8p2OaxMRErVixIlexHD9+XMOHD3cpfPfs2aM33nhDkpw/PrKT9sCCkydPOn+YXKts2bIqWbKkzp075yyC02zYsEGjRo3KdOy0I7q7du3KUSxpWrVqpWbNmuny5csaMGCALl265FwWFxenAQMGSJKefPJJ59Exq3j44YfVpEkTbdq0SX379s1wjmN8fLw+/vjjDAuZ3r17y2az6ZtvvnHOz05ru96IESNUokQJTZw4Ue+//76Sk5PT9YmOjtasWbOyjfvIkSP67LPPMpxv/uOPP0qSSpYsaYkzG3nhzTfflPT3D4O0/K5lmqY2btyoX375Jddju/u9B3KDU/+4rXz22WfOK6mTkpIUFxenLVu2OAuTNm3aaPr06emOnHbu3FmNGjVSZGSkatasqbvvvls+Pj7auHGjjh8/rpEjR2Y4JeBG+Pr6qm/fvs6nZVnlaGqad955RydOnNDs2bNVv359hYeHq1q1avLw8NCxY8e0detWXbx4UUuWLHHOU/X19dUPP/ygBx54QDNmzND333+vli1bytfXV0ePHlVUVJSaNm2aq2kBzz33nD777DP9/PPPatasmeLj47Vq1SolJyerS5cu+uc//5mjcYoUKaKHHnpICxYsUP369dWqVSvnY1s/++wz2e12jRkzRi+++KJ69eqlKVOmqFq1aoqJidG6devUs2dPrV27NsNTwo899phmzJihl19+WStWrFCZMmVkGIb69eunFi1aZBnX7Nmz1a5dOy1atEhVq1ZV69atnTf8T0xMVMOGDfXRRx/l+PPKC+PGjdPHH3+c6fL//ve/zqvLO3XqpC+++EILFixQeHi4KlWqpOTkZB06dEg7duxQamqq+vTpk+7OABUrVtS9996rpUuXasaMGTIMw3mU9XpBQUFatGiRHnvsMQ0fPlzvvvuu6tSpo/LlyyshIUF79uzRwYMH1axZM/Xs2TPL3OLj49W/f38NHDhQ9evXd17IduDAAUVFRckwDL333nt5dteKgta5c2dNnjxZL730kh566CFVr15dtWrVkr+/v2JjY7Vt2zadPn1aI0eOdJkOlRMdO3aUj4+PFi5cqFatWqlGjRqy2+1q2bJlpn9LILcoVHFb+f333/X7779L+vsqeH9/f9WtW1eNGzfWE088oSZNmmS4noeHh1avXq3x48fr22+/1cqVK1W8eHG1aNFC3377rc6fP5/nhar093/oJ02apODgYD388MN5Pv6N8PDw0Ndff62ePXvqs88+08aNG7Vz5075+PiofPny6ty5sx566KF0p6QbNGigHTt2aPLkyVq0aJFWr14th8Oh8uXL66GHHsr1P2DNmjXTs88+q7Fjx2r58uW6cOGCatSooaefflqDBw/O1R0Spk2bpoCAAC1ZskQLFixwPqIzberF0KFDVbVqVb377rvavXu3du3apdDQUE2ZMkXPPfdcplfnd+rUSZ9++qmmTp2qX3/91XlktFWrVtkWqtWqVdOWLVv073//WwsXLtRPP/0km82mWrVq6YknntALL7yQZxe05NShQ4eynDebdjSyQoUK2rBhg2bOnKl58+Zp+/bt2rRpk0qVKqUKFSroueee00MPPZTh7cWkv+ejpp2Sbt26tapVq5bpNlu3bq1du3bpo48+0s8//6w//vhDSUlJKlOmjCpVqqSePXvm6IKhkJAQTZo0SWvWrNHOnTu1ePFimaapihUrqlevXnrhhRdcnlh3O3jhhRfUrl07ffjhh84n7dlsNpUrV04NGjRQp06d3LrYqmzZslqyZIneeOMNRUZGav369XI4HEpJSaFQRZ4x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qHr16pKkAwcOaOHChapevbocDocmTpzoXMcwDL344ot5EzUAAABue25d9W+z5f5ArGEYSk1NzfV6ucFV/wAAANaW71f9R0dHuxUYAAAAkFNuFaqVK1fO6zgAAAAAFzxCFQAAAJaUoyOqVatWlc1m0969e1WkSBFVrVpVhmFkuY5hGDp48GCeBAkAAIDCJ0eF6t133y3DMJwXUaW9BwAAAPKLW1f9WxVX/QMAAFhbbuo15qgCAADAktwqVOfMmaM+ffpkurxv37765ptv3I0JAAAAcK9Q/eCDD1S0aNFMl3t7e+uDDz5wOygAAADArUJ13759atCgQabLw8PDtXfvXreDAgAAANwqVE3T1Llz5zJdHh8fr6tXr7obEwAAAOBeodqgQQPNmTNHycnJ6ZYlJSVp9uzZWR5xBQAAALLjVqH6yiuvaOfOnWrbtq1+/PFHHTp0SIcOHdIPP/ygNm3aaNeuXXrllVfyOlYAAAAUIjm64f/17r//fn3++ecaMmSIHnnkEWe7aZry8/PTp59+qk6dOuVVjAAAACiEbuiG/4mJifrll1906NAhSVJISIjuvfde+fn55VmAuY2HG/4DAABYV27qNbeOqKYpXry4unbteiNDAAAAABly+8lUqampmjt3rgYMGKAuXbpox44dkqSEhAR99913OnXqVJ4FCQAAgMLHrUL13Llzatmypbp37645c+bohx9+UGxsrCTJ19dXL7zwgiZPnpyngQIAAKBwcfuq/127dmnZsmU6dOiQrp3marfb1bVrVy1evDjPggQAAEDh41ahunDhQg0ePFgdOnSQYRjpltesWVOHDx++0dgAAABQiLlVqCYkJKhq1aqZLr969apSUlLcDgoAAABwq1ANCQnRli1bMl3+yy+/qHbt2m4HBQAAALhVqD7zzDOaPn265s2b55yfahiGkpKS9K9//UtLly7VgAED8jRQAAAAFC5u3Ud1yJAh2rVrl5566imVKFFCktS9e3edOXNGKSkpGjBggJ5++um8jBMAAACFzA09meq3337TggULdODAATkcDoWEhKhbt25q3bp1XsaYYzyZCgAAwNry9clUly5dUs+ePfXYY4+pR48eatWqlduBAgAAAJnJ9RzVYsWKacWKFbp06VJ+xAMAAABIcvNiqlatWmn9+vV5HQsAAADg5Fah+tFHH+n//b//p9GjR+vYsWN5Fsz48ePVpEkT+fn5qUyZMnrkkUe0b9++PBsfAAAAtw63Lqby8/NTSkqKkpOTJUkeHh4qWrSo68CGoYSEhFyNe9999+nJJ59UkyZNlJKSoldffVU7d+7U7t275ePjk+36XEwFAABgbfl6MZUkPfbYYxk+OvVGLV261OX9zJkzVaZMGUVGRhbYnQQAAABQMNwqVGfOnJnHYWQs7YhsqVKlMlyelJSkpKQk5/vExERJUkpKivMRrjabTTabTQ6HQw6Hw9k3rT01NVXXHlTOrN1ut8swjHSPhrXb7ZKk1NTUHLV7eHjINE2XdsMwZLfb08WYWTs5kRM5kRM5kRM5kdOtmtP1/bOSq0L1ypUrWrRokaKjo1W6dGl16tRJ5cuXz80QOeZwODR06FC1bNlSderUybDP+PHjFRERka49KirKOVUgMDBQISEhio6OVmxsrLNPUFCQgoKCtH//fpcpCtWqVVOZMmW0c+dOXb582dkeGhqqEiVKKCoqyuWDr1evnjw9PbV582aXGBo3bqzk5GRt377d2Wa329WkSRMlJCRo7969znZvb2+Fh4crLi5Ohw4dcrb7+/srLCxMx48fd5kLTE7kRE7kRE7kRE7kdKvmFBUVpZzK8RzV06dPq0WLFoqOjnZW08WKFdPChQvVvn37HG8wp/75z39qyZIl+u233xQUFJRhn4yOqAYHB+vMmTPOOQ8F/avhdvwlRE7kRE7kRE7kRE7k5G5O8fHxCggIyNEc1RwXqoMHD9bUqVM1dOhQtWvXTn/++afGjRun4sWL6+DBgzkZIseef/55LVq0SGvXrlXVqlVzvB4XUwEAAFhbvlxM9csvv6hXr17697//7WwrW7asunfvrn379qlWrVruR/x/TNPU4MGD9f3332v16tW5KlIBAABwe8nxfVRjYmLSPS61VatWMk1Tp06dypNgBg0apFmzZmn27Nny8/PTyZMndfLkSZf5EAAAACgcclyoJiUlycvLy6Ut7X1urt7KytSpU5WQkKA2bdqofPnyzte8efPyZHwAAADcOnJ11f/hw4e1ZcsW5/u0K8IOHDigEiVKpOvfsGHDXAXjxrMHAAAAcJvK8cVUNpstw5v8m6aZrj2t7fqrvfIbF1MBAABYW75cTDVjxowbDgwAAADIqRwXqr17987POAAAAAAXOb6YCgAAALiZKFQBAABgSRSqAAAAsCQKVQAAAFgShSoAAAAsiUIVAAAAlkShCgAAAEuiUAUAAIAlUagCAADAkihUAQAAYEkUqgAAALAkClUAAABYEoUqAAAALIlCFQAAAJZEoYpMrV27Vp07d1aFChVkGIYWLlyY7TrfffedOnTooMDAQBUvXlzNmzfXsmXL8j9YAABw26FQRaYuXryo8PBwTZkyJcfrrF27Vh06dNDixYsVGRmptm3bqnPnzoqKisrHSAEAwO2IQhWZuv/++/Xmm2+qS5cuOV5n0qRJevnll9WkSRPVqFFDb7/9tmrUqKEff/wx03VmzpypEiVK6KefflKtWrVUrFgxde3aVZcuXdIXX3yhKlWqqGTJknrhhReUmprqXK9KlSp688031atXL/n6+qpy5cr64YcfFBsbq4cffli+vr6qV6+eNm/efEOfAwAAKBgUqshXDodD58+fV6lSpbLsd+nSJf3nP//R3LlztXTpUq1evVpdunTR4sWLtXjxYn311VeaNm2aFixY4LLeBx98oJYtWyoqKkqdOnXSP/7xD/Xq1Us9e/bUli1bFBISol69esk0zfxMEwAA5AOPgg4At7d///vfunDhgrp165Zlv6tXr2rq1KkKCQmRJHXt2lVfffWVTp06JV9fX9WuXVtt27bVqlWr9MQTTzjXe+CBBzRgwABJ0pgxYzR16lQ1adJEjz/+uCRp5MiRat68uU6dOqVy5crlU5YAACA/cEQV+Wb27NmKiIjQN998ozJlymTZt1ixYs4iVZLKli2rKlWqyNfX16Xt9OnTLuvVq1fPZbkk1a1bN13b9esBAADr44gq8sXcuXP1zDPPaP78+Wrfvn22/YsUKeLy3jCMDNscDkem6xmGkWnb9esBAADr44gq8tycOXPUt29fzZkzR506dSrocAAAwC2KI6rI1IULF/Tnn38630dHR2vr1q0qVaqUKlWqJEkaNWqU/vrrL3355ZeS/j7d37t3b02ePFnNmjXTyZMnJUne3t7y9/e/+UkAAIBbFkdUkanNmzerQYMGatCggSRp2LBhatCggcaMGePsc+LECcXExDjff/LJJ0pJSdGgQYNUvnx552vIkCE3PX4AAHBrM8zb6L49iYmJ8vf3V0JCgooXL17Q4QAAAOA6uanXOKIKAAAAS6JQBQAAgCVRqAIAAMCSKFQBAABgSRSqAAAAsCQKVQAAAFgShSoAAAAsiUIVAAAAlkShCgAAAEuiUAUAAIAlUagCAADAkihUAQAAYEkUqgAAALAkj4IO4FYXExOjuLi4gg4DhVjp0qVVqVKlgg4DAIA8R6F6A2JiYlQrNExXLl8q6FBQiHl5F9O+vXsoVgEAtx0K1RsQFxenK5cvKeyeSfIpWb2gw0EhdDH+T+1ZOVRxcXEUqgCA2w6Fah7wKVldfoF1CzoMAACA2woXUwEAAMCSKFQBAABgSRSqAAAAsCQKVQAAAFgShSoAAAAsiUIVAAAAlmSpQnXt2rXq3LmzKlSoIMMwtHDhwoIOCQAAAAXEUoXqxYsXFR4erilTphR0KAAAAChglrrh//3336/777+/oMMAAACABViqUM2tpKQkJSUlOd8nJiZKklJSUpSSkiJJstlsstlscjgccjgczr5p7ampqTJNM9t2u90uwzCc40qSw+GQYRiSTHnY/je2JKU4DEmSh828rt0mQ6bs17SbklIdNhmGKbuRvt1mmLJd0+4wJYdpk81wyGbomnZDDtOQ3ebQNc1KNQ2ZGbU7DJkychE7OVkvJ1Oenp5yOBzO76bdbv97vdRUl/4eHh4yTdOl3TAM2e32dPtHZu35uT9lFTs5kRM5kRM53T45Xd8/K7d0oTp+/HhFRESka4+KipKPj48kKTAwUCEhIYqOjlZsbKyzT1BQkIKCgrR//34lJCQ426tVq6YyZcpo586dunz5srM9NDRUJUqUUFRUlPODT0hIUEBAgDzs0v3h0S4xLNlWVd6eKWoTdtTZluKwacm2qirtd1l3Vj/hbL9wxVOr9gQruNR5hVf6X4yx54tpw5/lVaNcvGqWi3e2x5zx07aYMqobHKdKAeed7ftPltS+E6XUpNopBfpdcrZviwlUzJnial3rL/l6JTvbN/xZXrHni6lD3SMuRdDqPcG6nOxBTrdCTnZpxIgROnPmjDZv3ixJaty4sZKTk7V9+3ZnX7vdriZNmighIUF79+51tnt7eys8PFxxcXE6dOiQs93f319hYWE6fvy4jh075mzPz/1JkurVqydPT09nLmnIiZzIiZzI6fbJKSoqSjllmNeWxhZiGIa+//57PfLII5n2yeiIanBwsM6cOaPixYtLyt9fDVu3blXTpk3V6LEfVLJsHZfYbv0jdbfj0cfbL6fzsTu0/YfH9Pvvv6t+/fqSbu9f4eRETuRETuR06+cUHx+vgIAAJSQkOOu1zNzSR1SLFi2qokWLpmv38PCQh4dramkf8vXSPrSctl87rs1m+78/mKEUR8bXpaUVQtcyZWTcbhpKMdO3pxU26dttcmTwMyM1k1gya89N7Jm1k1NB5WQoOTlZNpst3Xf++vfS3//Ryqg9s/0jt+03sj+5205O5CSRU2Yx5radnMhJKpicMmOpq/4BAACANJY6onrhwgX9+eefzvfR0dHaunWrSpUqpUqVKhVgZAAAALjZLFWobt68WW3btnW+HzZsmCSpd+/emjlzZgFFBQAAgIJgqVP/bdq0kWma6V4UqQAA3LqmTJmiKlWqyMvLS82aNdOmTZuy7D9z5kwZhuHy8vLyuknRwkosVagCAIDby7x58zRs2DCNHTtWW7ZsUXh4uDp27KjTp09nuV7x4sV14sQJ5+vIkSM3KWJYCYUqAADINxMnTlT//v3Vt29f1a5dWx9//LGKFSum6dOnZ7meYRgqV66c81W2bNks+7/++uuqX7++pk+frkqVKsnX11cDBw5Uamqq3n33XZUrV05lypTRW2+9lW4706ZN04MPPqhixYopLCxM69ev159//qk2bdrIx8dHLVq00MGDB2/4s0DuUagCAIB8kZycrMjISLVv397ZZrPZ1L59e61fvz7LdS9cuKDKlSsrODhYDz/8sHbt2pXt9g4ePKglS5Zo6dKlmjNnjj7//HN16tRJx44d05o1azRhwgSNHj1aGzdudFlv3Lhx6tWrl7Zu3arQ0FB1795dAwYM0KhRo7R582aZpqnnn3/evQ8BN4RCFQAA5Iu4uDilpqamOxpatmxZnTx5MtP1atWqpenTp2vRokWaNWuWHA6HWrRo4fJ0pYw4HA5Nnz5dtWvXVufOndW2bVvt27dPkyZNUq1atdS3b1/VqlVLq1atclmvb9++6tatm2rWrKmRI0fq8OHD6tGjhzp27KiwsDANGTJEq1evdvtzgPssddU/AABA8+bN1bx5c+f7Fi1aKCwsTNOmTdO4ceMyXa9KlSry8/Nzvi9btqzsdrvLTe3Lli2bbn5svXr1XJZLUt26dV3arly5osTExGyfpIS8xRFVAACQL0qXLi273a5Tp065tJ86dUrlypXL8ThFihRRgwYNXO61nlm/axmGkWHbtY8NvX49wzAybbt+PeQ/ClUAAJAvPD091ahRI61cudLZ5nA4tHLlSpcjptlJTU3Vjh07VL58+fwIExbGqX8AAJBvhg0bpt69e6tx48Zq2rSpJk2apIsXL6pv377OPr169VLFihU1fvx4SdIbb7yhO++8U9WrV9e5c+f03nvv6ciRI3rmmWcKKg0UEApVAACQb5544gnFxsZqzJgxOnnypOrXr6+lS5e6XGAVExPjMo80Pj5e/fv318mTJ1WyZEk1atRI69atU+3atQsiBRQgwzRNs6CDyCuJiYny9/dXQkLCTZnsvGXLFjVq1EiNu/4kv8C62a8A5LHzsTu0ecGDioyMVMOGDQs6HAAAspWbeo05qgAAALAkClUAAABYEoUqAAAALIlCFQAAAJZEoQoAAABLolAFAACAJVGoAgAAwJIoVAEAAGBJFKoAAACwJApVAAAAWBKFKgAAACyJQhUAAACWRKEKAAAAS/Io6AAAACjsYmJiFBcXV9BhoBArXbq0KlWqVNBhpEOhCgBAAYqJiVGt0DBduXypoENBIeblXUz79u6xXLFKoQoAQAGKi4vTlcuXFHbPJPmUrF7Q4aAQuhj/p/asHKq4uDgKVQAAkJ5PyeryC6xb0GEAlsLFVAAAALAkClUAAABYEoUqAAAALIlCFQBu0JQpU1SlShV5eXmpWbNm2rRpU7brzJ8/X6GhofLy8lLdunW1ePHimxApANxaKFQB4AbMmzdPw4YN09ixY7VlyxaFh4erY8eOOn36dKbrrFu3Tk899ZSefvppRUVF6ZFHHtEjjzyinTt33sTIAcD6KFQB4AZMnDhR/fv3V9++fVW7dm19/PHHKlasmKZPn57pOpMnT9Z9992nESNGKCwsTOPGjVPDhg310UcfZbrO66+/rvr162v69OmqVKmSfH19NXDgQKWmpurdd99VuXLlVKZMGb311lsu6xmGoWnTpunBBx9UsWLFFBYWpvXr1+vPP/9UmzZt5OPjoxYtWujgwYN59pkAQF6hUAUANyUnJysyMlLt27d3ttlsNrVv317r16/PdL3169e7rCNJHTt2zHIdSTp48KCWLFmipUuXas6cOfr888/VqVMnHTt2TGvWrNGECRM0evRobdy40WW9cePGqVevXtq6datCQ0PVvXt3DRgwQKNGjdLmzZtlmqaef/55Nz4BAMhf3EcVANwUFxen1NRUlS1b1qW9bNmy2rt3b6brnTx5MsN1Tp48meX2HA6Hpk+fLj8/P9WuXVtt27bVvn37tHjxYtlsNtWqVUsTJkzQqlWr1KxZM+d6ffv2Vbdu3SRJI0eOVPPmzfXaa6+pY8eOkqQhQ4aob9++ucodAG4GClUAuEVUqVJFfn5+zvdly5aV3W6XzWZzabt+fmy9evVclktS3bp1XdquXLmixMREFS9ePL/CB4Bc49Q/ALipdOnSstvtOnXqlEv7qVOnVK5cuUzXK1euXK7XkaQiRYq4vDcMI8M2h8OR6XqGYWTadv16AFDQKFQBwE2enp5q1KiRVq5c6WxzOBxauXKlmjdvnul6zZs3d1lHkpYvX57lOgBQGHHqHwBuwLBhw9S7d281btxYTZs21aRJk3Tx4kWXOZ+9evVSxYoVNX78eEl/zwm9++679f7776tTp06aO3euNm/erE8++aSg0gAAS6JQBYAb8MQTTyg2NlZjxozRyZMnVb9+fS1dutTlYqmYmBiXeaQtWrTQ7NmzNXr0aL366quqUaOGFi5cqDp16hRECgBgWYZpmmZBB5FXEhMT5e/vr4SEhJtyQcCWLVvUqFEjNe76k/wC62a/ApDHzsfu0OYFDyoyMlINGzYs6HAAuIF/S1DQbva/Jbmp15ijCgAAAEuiUAUAAIAlUagCAADAkihUAQAAYEkUqgAAALAkClUAAABYEoUqAAAALIlCFQAAAJZEoQoAAABLolAFAACAJVmyUJ0yZYqqVKkiLy8vNWvWTJs2bSrokAAAAHCTWa5QnTdvnoYNG6axY8dqy5YtCg8PV8eOHXX69OmCDg0AAAA3keUK1YkTJ6p///7q27evateurY8//ljFihXT9OnTCzo0AAAA3EQeBR3AtZKTkxUZGalRo0Y522w2m9q3b6/169en65+UlKSkpCTn+4SEBEnS2bNnlZKS4lzfZrPJ4XDI4XC4jGuz2ZSamirTNLNtt9vtMgzDOa4kJSYm/v2/sTslx0WX2FJT09bTde2GDMOU7ZqfCKYpORyZt9sMU0ZG7TZThnFNu0NymOnbHQ7JzKLdbv9fnlnHTk5Wy+niuWgVKVJEiYmJOnv27P/lYv+/5aku/T08PGSapku7YRiy2+3p9o/M2t3dn44fP66TJ0+6jG8YhssYae1/f3ZmjtptNptM03RpTxu7oNrJyZo5lS1bVmXLls3wv+VS5vvNzdifzp8/ryJFiuhy/C7JcZH/7pHTTc/pcsJhFSlSROfPn1diYuIN1UZp7X/HmvH+FB8f/39xuH4WGTIt5K+//jIlmevWrXNpHzFihNm0adN0/ceOHWtK4sWLFy9evHjx4nWLvY4ePZptbWipI6q5NWrUKA0bNsz53uFw6OzZswoICHD+soe1JSYmKjg4WEePHlXx4sULOhzActhHgKyxj9x6TNPU+fPnVaFChWz7WqpQLV26tOx2u06dOuXSfurUKZUrVy5d/6JFi6po0aIubSVKlMjPEJFPihcvzn9ggCywjwBZYx+5tfj7++eon6UupvL09FSjRo20cuVKZ5vD4dDKlSvVvHnzAowMAAAAN5uljqhK0rBhw9S7d281btxYTZs21aRJk3Tx4kX17du3oEMDAADATWS5QvWJJ55QbGysxowZo5MnT6p+/fpaunSpypYtW9ChIR8ULVpUY8eOTTeFA8Df2EeArLGP3N4M08zJvQEAAACAm8tSc1QBAACANBSqAAAAsCQKVQAAAFgShSoAAAAsiUK1kBg/fryaNGkiPz8/lSlTRo888oj27dvn0ufKlSsaNGiQAgIC5Ovrq8cee8zl4Qvbtm3TU089peDgYHl7eyssLEyTJ092GWP16tXOZ2xf+7r2Oe8ZMU1TY8aMUfny5eXt7a327dvrwIEDLn2qVKmSbtx33nkny3FPnDih7t27q2bNmrLZbBo6dGi6PlevXtUbb7yhkJAQeXl5KTw8XEuXLs1yXNx+Cus+8t1336lDhw4KDAxU8eLF1bx5cy1btixdvylTpqhKlSry8vJSs2bNtGnTpizHxe2J/STz/WTt2rXq3LmzKlSoIMMwtHDhwizHRM5QqBYSa9as0aBBg7RhwwYtX75cV69e1b333quLFy86+7z44ov68ccfNX/+fK1Zs0bHjx/Xo48+6lweGRmpMmXKaNasWdq1a5f+9a9/adSoUfroo4/SbW/fvn06ceKE81WmTJks43v33Xf1n//8Rx9//LE2btwoHx8fdezYUVeuXHHp98Ybb7iMO3jw4CzHTUpKUmBgoEaPHq3w8PAM+4wePVrTpk3Thx9+qN27d+u5555Tly5dFBUVleXYuL0U1n1k7dq16tChgxYvXqzIyEi1bdtWnTt3dvn+z5s3T8OGDdPYsWO1ZcsWhYeHq2PHjjp9+nSWY+P2w36S+X5y8eJFhYeHa8qUKVmOhVwyUSidPn3alGSuWbPGNE3TPHfunFmkSBFz/vz5zj579uwxJZnr16/PdJyBAweabdu2db5ftWqVKcmMj4/PcSwOh8MsV66c+d577znbzp07ZxYtWtScM2eOs61y5crmBx98kONxr3f33XebQ4YMSddevnx586OPPnJpe/TRR80ePXq4vS3c+grjPpKmdu3aZkREhPN906ZNzUGDBjnfp6ammhUqVDDHjx9/w9vCrY39JCLDZZLM77///oa3AdPkiGohlZCQIEkqVaqUpL9/4V69elXt27d39gkNDVWlSpW0fv36LMdJG+Na9evXV/ny5dWhQwf9/vvvWcYSHR2tkydPumzb399fzZo1S7ftd955RwEBAWrQoIHee+89paSkZJ9sNpKSkuTl5eXS5u3trd9+++2Gx8atq7DuIw6HQ+fPn3fGnJycrMjISJdt22w2tW/fPsu8UTiwn6SPGXnLck+mQv5zOBwaOnSoWrZsqTp16kiSTp48KU9PT5UoUcKlb9myZTOdE7Ru3TrNmzdPP//8s7OtfPny+vjjj9W4cWMlJSXps88+U5s2bbRx40Y1bNgww3HSxr/+6WPXb/uFF15Qw4YNVapUKa1bt06jRo3SiRMnNHHixFx/Btfq2LGjJk6cqNatWyskJEQrV67Ud999p9TU1BsaF7euwryP/Pvf/9aFCxfUrVs3SVJcXJxSU1Mz3PbevXtzPC5uP+wn/9tPkI8K+pAubr7nnnvOrFy5snn06FFn29dff216enqm69ukSRPz5ZdfTte+Y8cOs3Tp0ua4ceOy3V7r1q3Nnj17mqZpmrNmzTJ9fHycr7Vr15q///67Kck8fvy4y3qPP/642a1bt0zH/fzzz00PDw/zypUrpmmaLuMOGDAgXf/MTv2fPn3afPjhh02bzWba7XazZs2a5sCBA00vL69sc8PtqbDuI19//bVZrFgxc/ny5c62v/76y5Rkrlu3zqXviBEjzKZNm2abG25f7CfL0y1LI0795xmOqBYyzz//vH766SetXbtWQUFBzvZy5copOTlZ586dc/klfOrUKZUrV85ljN27d+uee+7Rs88+q9GjR2e7zaZNmzpPoz/00ENq1qyZc1nFihV14sQJ57bKly/vsu369etnOm6zZs2UkpKiw4cPq1atWtq6datzWfHixbONK01gYKAWLlyoK1eu6MyZM6pQoYJeeeUVVatWLcdj4PZRWPeRuXPn6plnntH8+fNdTp2WLl1adrvd5artzPJG4cF+4rqfIB8VdKWMm8PhcJiDBg0yK1SoYO7fvz/d8rQJ8AsWLHC27d27N90E+J07d5plypQxR4wYkeNtt2/f3uzSpUuWsZUrV87897//7WxLSEhINwH+erNmzTJtNpt59uzZHMWR2RHV6yUnJ5shISHmqFGjcjQubg+FeR+ZPXu26eXlZS5cuDDD5U2bNjWff/555/vU1FSzYsWKXExVCLGfZL6fXEscUc0zFKqFxD//+U/T39/fXL16tXnixAnn69KlS84+zz33nFmpUiXz119/NTdv3mw2b97cbN68uXP5jh07zMDAQLNnz54uY5w+fdrZ54MPPjAXLlxoHjhwwNyxY4c5ZMgQ02azmStWrMgyvnfeeccsUaKEuWjRInP79u3mww8/bFatWtW8fPmyaZqmuW7dOvODDz4wt27dah48eNCcNWuWGRgYaPbq1Svb3KOiosyoqCizUaNGZvfu3c2oqChz165dzuUbNmwwv/32W/PgwYPm2rVrzXbt2plVq1bN1dWmuPUV1n3k66+/Nj08PMwpU6a4xHzu3Dlnn7lz55pFixY1Z86cae7evdt89tlnzRIlSpgnT57M1WeMWx/7Seb7yfnz553/3kgyJ06caEZFRZlHjhzJ1WcMVxSqhYSkDF8zZsxw9rl8+bI5cOBAs2TJkmaxYsXMLl26mCdOnHAuHzt2bIZjVK5c2dlnwoQJZkhIiOnl5WWWKlXKbNOmjfnrr79mG5/D4TBfe+01s2zZsmbRokXNe+65x9y3b59zeWRkpNmsWTPT39/f9PLyMsPCwsy3337bOacot7lfG/Pq1avNsLAws2jRomZAQID5j3/8w/zrr7+yHRe3l8K6j9x9990Zxty7d2+Xfh9++KFZqVIl09PT02zatKm5YcOGbGPG7Yf9JPP9JO2WWtntS8gdwzRNM6+mEQAAAAB5hfuoAgAAwJIoVAEAAGBJFKoAAACwJApVAAAAWBKFKgAAACyJQhUAAACWRKEKAAAAS6JQBQAAgCVRqAIAAMCSKFQBIJ/MnDlThmE4X15eXqpQoYI6duyo//znPzp//rxb465bt06vv/66zp07l7cBA4DFUKgCQD5744039NVXX2nq1KkaPHiwJGno0KGqW7eutm/fnuvx1q1bp4iICApVALc9j4IOAABud/fff78aN27sfD9q1Cj9+uuvevDBB/XQQw9pz5498vb2LsAIAcCaOKIKAAWgXbt2eu2113TkyBHNmjVLkrR9+3b16dNH1apVk5eXl8qVK6d+/frpzJkzzvVef/11jRgxQpJUtWpV57SCw4cPO/vMmjVLjRo1kre3t0qVKqUnn3xSR48evan5AUBeoFAFgALyj3/8Q5L0yy+/SJKWL1+uQ4cOqW/fvvrwww/15JNPau7cuXrggQdkmqYk6dFHH9VTTz0lSfrggw/01Vdf6auvvlJgYKAk6a233lKvXr1Uo0YNTZw4UUOHDtXKlSvVunVrpgoAuOVw6h8ACkhQUJD8/f118OBBSdLAgQP10ksvufS588479dRTT+m3337TXXfdpXr16qlhw4aaM2eOHnnkEVWpUsXZ98iRIxo7dqzefPNNvfrqq872Rx99VA0aNNB///tfl3YAsDqOqAJAAfL19XVe/X/tPNUrV64oLi5Od955pyRpy5Yt2Y713XffyeFwqFu3boqLi3O+ypUrpxo1amjVqlX5kwQA5BOOqAJAAbpw4YLKlCkjSTp79qwiIiI0d+5cnT592qVfQkJCtmMdOHBApmmqRo0aGS4vUqTIjQcMADcRhSoAFJBjx44pISFB1atXlyR169ZN69at04gRI1S/fn35+vrK4XDovvvuk8PhyHY8h8MhwzC0ZMkS2e32dMt9fX3zPAcAyE8UqgBQQL766itJUseOHRUfH6+VK1cqIiJCY8aMcfY5cOBAuvUMw8hwvJCQEJmmqapVq6pmzZr5EzQA3ETMUQWAAvDrr79q3Lhxqlq1qnr06OE8App2dX+aSZMmpVvXx8dHktJdxf/oo4/KbrcrIiIi3Timabrc5goAbgUcUQWAfLZkyRLt3btXKSkpOnXqlH799VctX75clStX1g8//CAvLy95eXmpdevWevfdd3X16lVVrFhRv/zyi6Kjo9ON16hRI0nSv/71Lz355JMqUqSIOnfurJCQEL355psaNWqUDh8+rEceeUR+fn6Kjo7W999/r2effVbDhw+/2ekDgNsoVAEgn6Wdyvf09FSpUqVUt25dTZo0SX379pWfn5+z3+zZszV48GBNmTJFpmnq3nvv1ZIlS1ShQgWX8Zo0aaJx48bp448/1tKlS+VwOBQdHS0fHx+98sorqlmzpj744ANFRERIkoKDg3XvvffqoYceunlJA0AeMMzrzw8BAAAAFsAcVQAAAFgShSoAAAAsiUIVAAAAlkShCgAAAEuiUAUAAIAlUagCAADAkihUAQAAYEkUqgAAALAkClUAAABYEoUqAAAALIlCFQAAAJZEoQoAAABL+v/BUiNJqqFo5wAAAABJRU5ErkJggg==\n"
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "9f95d160",
+      "metadata": {
+        "id": "9f95d160"
+      },
+      "source": [
+        "## 🤖 Natural Language Processing"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 37,
+      "id": "bcc5833e",
+      "metadata": {
+        "id": "bcc5833e"
+      },
+      "outputs": [],
+      "source": [
+        "import re\n",
+        "\n",
+        "def parse_weather_question(question):\n",
+        "    \"\"\"\n",
+        "    Parse a natural language weather question.\n",
+        "\n",
+        "    Args:\n",
+        "        question (str): User's weather-related question\n",
+        "\n",
+        "    Returns:\n",
+        "        dict: Extracted information including location, time period, and weather attribute\n",
+        "    \"\"\"\n",
+        "    question = question.lower().strip()\n",
+        "\n",
+        "    # Identify time period\n",
+        "    if \"tomorrow\" in question:\n",
+        "        time_period = \"tomorrow\"\n",
+        "    elif \"today\" in question:\n",
+        "        time_period = \"today\"\n",
+        "    else:\n",
+        "        time_period = \"today\"  # Default to today if not specified\n",
+        "\n",
+        "    # Identify weather attribute\n",
+        "    if \"temperature\" in question:\n",
+        "        attribute = \"temperature\"\n",
+        "    elif \"rain\" in question or \"precipitation\" in question:\n",
+        "        attribute = \"rain\"\n",
+        "    elif \"humidity\" in question:\n",
+        "        attribute = \"humidity\"\n",
+        "    elif \"wind\" in question:\n",
+        "        attribute = \"wind\"\n",
+        "    else:\n",
+        "        attribute = \"weather\"  # Default to general weather if not specified\n",
+        "\n",
+        "    # Clean and extract location\n",
+        "    words_to_remove = [\n",
+        "        \"what\", \"will\", \"be\", \"the\", \"in\", \"today\", \"tomorrow\", \"temperature\",\n",
+        "        \"rain\", \"precipitation\", \"humidity\", \"wind\", \"weather\", \"?\", \".\"\n",
+        "    ]\n",
+        "    location = re.sub(r'[^\\w\\s]', '', question)  # Remove punctuation\n",
+        "    location = \" \".join(\n",
+        "        [word for word in location.split() if word not in words_to_remove]\n",
+        "    ).strip()\n",
+        "\n",
+        "    return {\n",
+        "        \"location\": location,\n",
+        "        \"time_period\": time_period,\n",
+        "        \"attribute\": attribute,\n",
+        "    }\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "0d85225e",
+      "metadata": {
+        "id": "0d85225e"
+      },
+      "source": [
+        "## 🧭 User Interface"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 38,
+      "id": "fa6cb0f6",
+      "metadata": {
+        "id": "fa6cb0f6",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "5e2a4b07-ef60-4656-8740-f752f6fbe32f"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Welcome to Weather Advisor!\n",
+            "Enter the city/location name (e.g., Perth): perth\n",
+            "Select time period (today/tomorrow): today\n",
+            "Select weather attribute ['temperature', 'rain', 'humidity', 'wind', 'weather']: rain\n",
+            "\n",
+            "You asked: What is the rain in perth today?\n",
+            "Current weather in perth:\n",
+            "  Temperature: 24.44°C\n",
+            "  Weather: scattered clouds\n",
+            "  Humidity: 52%\n",
+            "  Wind Speed: 8.23 m/s\n",
+            "----------------------------------------\n",
+            "Forecast for 2025-05-19:\n",
+            "  Avg Temperature: 19.4°C\n",
+            "  Common Weather: light rain\n",
+            "  Number of Forecast Entries: 4\n",
+            "--------------------\n",
+            "Forecast for 2025-05-20:\n",
+            "  Avg Temperature: 16.2°C\n",
+            "  Common Weather: clear sky\n",
+            "  Number of Forecast Entries: 8\n",
+            "--------------------\n",
+            "Forecast for 2025-05-21:\n",
+            "  Avg Temperature: 18.5°C\n",
+            "  Common Weather: clear sky\n",
+            "  Number of Forecast Entries: 8\n",
+            "--------------------\n",
+            "\n",
+            "Sorry, I couldn't find weather data for is perth.\n",
+            "\n",
+            "----------------------------------------\n",
+            "Would you like to check another weather report? (yes/no): yes\n",
+            "Enter the city/location name (e.g., Perth): perth\n",
+            "Select time period (today/tomorrow): tomorrow\n",
+            "Select weather attribute ['temperature', 'rain', 'humidity', 'wind', 'weather']: wind\n",
+            "\n",
+            "You asked: What is the wind in perth tomorrow?\n",
+            "Current weather in perth:\n",
+            "  Temperature: 24.44°C\n",
+            "  Weather: scattered clouds\n",
+            "  Humidity: 52%\n",
+            "  Wind Speed: 8.23 m/s\n",
+            "----------------------------------------\n",
+            "Forecast for 2025-05-19:\n",
+            "  Avg Temperature: 19.4°C\n",
+            "  Common Weather: light rain\n",
+            "  Number of Forecast Entries: 4\n",
+            "--------------------\n",
+            "Forecast for 2025-05-20:\n",
+            "  Avg Temperature: 16.2°C\n",
+            "  Common Weather: clear sky\n",
+            "  Number of Forecast Entries: 8\n",
+            "--------------------\n",
+            "Forecast for 2025-05-21:\n",
+            "  Avg Temperature: 18.5°C\n",
+            "  Common Weather: clear sky\n",
+            "  Number of Forecast Entries: 8\n",
+            "--------------------\n",
+            "\n",
+            "Sorry, I couldn't find weather data for is perth.\n",
+            "\n",
+            "----------------------------------------\n",
+            "Would you like to check another weather report? (yes/no): no\n",
+            "Thanks for using Weather Advisor! Goodbye!\n"
+          ]
+        }
+      ],
+      "source": [
+        "def weather_menu():\n",
+        "    print(\"Welcome to Weather Advisor!\")\n",
+        "\n",
+        "    while True:\n",
+        "        location = input(\"Enter the city/location name (e.g., Perth): \")\n",
+        "\n",
+        "        time_period = ''\n",
+        "        while time_period not in ['today', 'tomorrow']:\n",
+        "            time_period = input(\"Select time period (today/tomorrow): \").strip().lower()\n",
+        "\n",
+        "        attribute = ''\n",
+        "        valid_attrs = ['temperature', 'rain', 'humidity', 'wind', 'weather']\n",
+        "        while attribute not in valid_attrs:\n",
+        "            attribute = input(f\"Select weather attribute {valid_attrs}: \").strip().lower()\n",
+        "\n",
+        "        question = f\"What is the {attribute} in {location} {time_period}?\"\n",
+        "        print(f\"\\nYou asked: {question}\")\n",
+        "\n",
+        "        # Your parsing and weather logic here\n",
+        "        parsed_info = parse_weather_question(question)\n",
+        "        weather_data = get_weather_data(location)\n",
+        "        response = generate_weather_response(parsed_info, weather_data)\n",
+        "\n",
+        "        print(\"\\n\" + response)\n",
+        "        print(\"\\n\" + \"-\"*40)\n",
+        "\n",
+        "        cont = input(\"Would you like to check another weather report? (yes/no): \").strip().lower()\n",
+        "        if cont != 'yes':\n",
+        "            print(\"Thanks for using Weather Advisor! Goodbye!\")\n",
+        "            break\n",
+        "\n",
+        "if __name__ == \"__main__\":\n",
+        "    weather_menu()\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "d643a53c",
+      "metadata": {
+        "id": "d643a53c"
+      },
+      "source": [
+        "## 🧩 Main Application Logic"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 39,
+      "id": "a9e2e805",
+      "metadata": {
+        "id": "a9e2e805",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "60871416-ab64-41f4-ffde-0aea741725e0"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "The current temperature in Perth is 24.87°C.\n"
+          ]
+        }
+      ],
+      "source": [
+        "sample_parsed_question = {\n",
+        "    'location': 'Perth',\n",
+        "    'time_period': 'today',\n",
+        "    'attribute': 'temperature'\n",
+        "}\n",
+        "\n",
+        "sample_weather_data = {\n",
+        "    'current': {\n",
+        "        'temperature': 24.87,\n",
+        "        'rain': 0,\n",
+        "        'humidity': 52,\n",
+        "        'wind_speed': 8.23,\n",
+        "        'weather': 'scattered clouds'\n",
+        "    },\n",
+        "    'forecast': {\n",
+        "        'tomorrow': {\n",
+        "            'avg_temp': 19.2,\n",
+        "            'rain': 1.2,\n",
+        "            'avg_humidity': 60,\n",
+        "            'avg_wind_speed': 5.0,\n",
+        "            'common_weather': 'light rain'\n",
+        "        }\n",
+        "    }\n",
+        "}\n",
+        "\n",
+        "print(generate_weather_response(sample_parsed_question, sample_weather_data))\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "fde44479",
+      "metadata": {
+        "id": "fde44479"
+      },
+      "source": [
+        "## 🧪 Testing and Examples"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 40,
+      "id": "4e573901",
+      "metadata": {
+        "id": "4e573901",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "cd028035-cbfe-4c78-eb1f-8fbe4455fca9"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "The current temperature in Perth is 24.87°C.\n",
+            "The expected rainfall in Perth tomorrow is 1.2 mm.\n"
+          ]
+        }
+      ],
+      "source": [
+        "def generate_weather_response(parsed_question, weather_data):\n",
+        "    \"\"\"\n",
+        "    Generate a natural language response to a weather question.\n",
+        "\n",
+        "    Args:\n",
+        "        parsed_question (dict): Parsed question data\n",
+        "        weather_data (dict): Weather data\n",
+        "\n",
+        "    Returns:\n",
+        "        str: Natural language response\n",
+        "    \"\"\"\n",
+        "    location = parsed_question.get('location', 'Unknown location')\n",
+        "    time_period = parsed_question.get('time_period', 'today')\n",
+        "    attribute = parsed_question.get('attribute', 'temperature')\n",
+        "\n",
+        "    if not weather_data:\n",
+        "        return f\"Sorry, I couldn't find weather data for {location}.\"\n",
+        "\n",
+        "    if time_period == \"today\":\n",
+        "        current = weather_data.get(\"current\", {})\n",
+        "        if not current:\n",
+        "            return f\"Sorry, no current weather data for {location}.\"\n",
+        "        if attribute == \"temperature\":\n",
+        "            return f\"The current temperature in {location} is {current.get('temperature', 'N/A')}°C.\"\n",
+        "        elif attribute == \"rain\":\n",
+        "            return f\"The current rainfall in {location} is {current.get('rain', 0)} mm.\"\n",
+        "        elif attribute == \"humidity\":\n",
+        "            return f\"The current humidity in {location} is {current.get('humidity', 'N/A')}%.\"\n",
+        "        elif attribute == \"wind\":\n",
+        "            return f\"The current wind speed in {location} is {current.get('wind_speed', 'N/A')} m/s.\"\n",
+        "        elif attribute == \"weather\":\n",
+        "            return f\"The current weather in {location} is {current.get('weather', 'N/A')}.\"\n",
+        "    elif time_period == \"tomorrow\":\n",
+        "        forecast = weather_data.get(\"forecast\", {}).get(\"tomorrow\", {})\n",
+        "        if not forecast:\n",
+        "            return f\"Sorry, I couldn't find forecast data for {location} tomorrow.\"\n",
+        "        if attribute == \"temperature\":\n",
+        "            return f\"The average temperature in {location} tomorrow will be {forecast.get('avg_temp', 'N/A')}°C.\"\n",
+        "        elif attribute == \"rain\":\n",
+        "            return f\"The expected rainfall in {location} tomorrow is {forecast.get('rain', 0)} mm.\"\n",
+        "        elif attribute == \"humidity\":\n",
+        "            return f\"The average humidity in {location} tomorrow will be {forecast.get('avg_humidity', 'N/A')}%.\"\n",
+        "        elif attribute == \"wind\":\n",
+        "            return f\"The average wind speed in {location} tomorrow will be {forecast.get('avg_wind_speed', 'N/A')} m/s.\"\n",
+        "        elif attribute == \"weather\":\n",
+        "            return f\"The common weather in {location} tomorrow will be {forecast.get('common_weather', 'N/A')}.\"\n",
+        "\n",
+        "    return f\"Sorry, I couldn't answer your question about {attribute} in {location}.\"\n",
+        "\n",
+        "# --- Testing the function ---\n",
+        "\n",
+        "sample_parsed_question = {\n",
+        "    'location': 'Perth',\n",
+        "    'time_period': 'today',\n",
+        "    'attribute': 'temperature'\n",
+        "}\n",
+        "\n",
+        "sample_weather_data = {\n",
+        "    'current': {\n",
+        "        'temperature': 24.87,\n",
+        "        'rain': 0,\n",
+        "        'humidity': 52,\n",
+        "        'wind_speed': 8.23,\n",
+        "        'weather': 'scattered clouds'\n",
+        "    },\n",
+        "    'forecast': {\n",
+        "        'tomorrow': {\n",
+        "            'avg_temp': 19.2,\n",
+        "            'rain': 1.2,\n",
+        "            'avg_humidity': 60,\n",
+        "            'avg_wind_speed': 5.0,\n",
+        "            'common_weather': 'light rain'\n",
+        "        }\n",
+        "    }\n",
+        "}\n",
+        "\n",
+        "print(generate_weather_response(sample_parsed_question, sample_weather_data))\n",
+        "# Expected output: \"The current temperature in Perth is 24.87°C.\"\n",
+        "\n",
+        "sample_parsed_question2 = {\n",
+        "    'location': 'Perth',\n",
+        "    'time_period': 'tomorrow',\n",
+        "    'attribute': 'rain'\n",
+        "}\n",
+        "\n",
+        "print(generate_weather_response(sample_parsed_question2, sample_weather_data))\n",
+        "# Expected output: \"The expected rainfall in Perth tomorrow is 1.2 mm.\"\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "d2885880",
+      "metadata": {
+        "id": "d2885880"
+      },
+      "source": [
+        "## 🗂️ AI Prompting Log (Optional)\n",
+        "Add markdown cells here summarising prompts used or link to AI conversations in the `ai-conversations/` folder."
+      ]
+    }
+  ],
+  "metadata": {
+    "language_info": {
+      "name": "python"
+    },
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
